@@ -74,10 +74,10 @@ id (PK)
 usuario_id (FK → Usuario)
 pista_id (FK → Pista)
 fecha
-hora_inicio
-hora_fin
+fechaHoraInicio (LocalDateTime)
+fechaHoraFin (LocalDateTime)
 estado:
-  - PENDING
+  
   - CONFIRMED
   - CANCELLED
   - COMPLETED

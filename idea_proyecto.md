@@ -69,7 +69,7 @@ Puede:
 - horaInicio
 - horaFin
 - estado:
-  - PENDING
+  
   - CONFIRMED
   - CANCELLED
   - COMPLETED
@@ -106,8 +106,10 @@ No se puede crear una reserva si:
 ### 🔴 R3 — Límite de reservas por usuario
 Un usuario solo puede tener un número limitado de reservas activas futuras.
 
-MVP recomendado:
-- máximo 3 reservas activas futuras
+MVP: máximo 3 reservas activas futuras.
+
+El conteo incluye únicamente reservas en estado CONFIRMED con fecha futura.
+Las reservas CANCELLED o COMPLETED no computan para este límite.
 
 ---
 
@@ -121,10 +123,17 @@ El administrador sí puede cancelar en cualquier momento.
 ### 🔴 R5 — Estados de reserva
 Una reserva puede estar en los siguientes estados:
 
-- PENDING (creada)
-- CONFIRMED (validada)
+- Las reservas una vez realizadas llevarán el estado CONFIRMED de inicio.
+- Una vez pasada la fecha para la que fue creada, pasará automáticamente a COMPLETED.
+- Si es cancelada pasará a CANCELLED.
+
+Estados posibles:
+- CONFIRMED (validada al crearse)
 - CANCELLED (cancelada)
 - COMPLETED (finalizada)
+
+Solo se pueden cancelar reservas en estado CONFIRMED. Intentar cancelar una
+reserva COMPLETED o CANCELLED debe lanzar una excepción de negocio.
 
 ---
 
