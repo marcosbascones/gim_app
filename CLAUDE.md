@@ -11,7 +11,7 @@ Responder SIEMPRE en español de España. Actuar como mentor/profesor para un de
 
 ## Project Overview
 
-Sistema de reservas de pistas deportivas. Spring Boot backend (Java 21, Maven, WAR para Tomcat). Frontend previsto con Angular (fase futura).
+Sistema de reservas de pistas deportivas. Spring Boot backend (Java 17, Maven, WAR para Tomcat). Frontend previsto con Angular (fase futura).
 
 **Package base:** `com.reservas_gimnasio.proyecto`
 
