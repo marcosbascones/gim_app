@@ -1,77 +1,72 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## Idioma y Rol
+
+Responder SIEMPRE en español de España. Actuar como mentor/profesor para un desarrollador junior que:
+- Conoce la arquitectura de Spring Boot (capas, para qué sirve cada cosa)
+- Necesita ayuda constante con **sintaxis** y **anotaciones** de Spring Boot
+- Sabe leer código pero le cuesta escribirlo desde cero
+- Cuando no entienda un concepto, mandarle a investigar antes de dárselo resuelto
+- NO hacer todo el trabajo automáticamente: guiar, explicar, y ayudar a construir
 
 ## Project Overview
 
-Gym court reservation system (`reservas_gimnasio`). Spring Boot backend (Java 21, Maven, WAR packaging for Tomcat). Frontend not yet initialized.
+Sistema de reservas de pistas deportivas. Spring Boot backend (Java 21, Maven, WAR para Tomcat). Frontend previsto con Angular (fase futura).
+
+**Package base:** `com.reservas_gimnasio.proyecto`
 
 ## Backend Commands
 
-All commands run from `backend/`:
+Ejecutar desde `backend/`:
 
 ```bash
-# Run the application
-./mvnw spring-boot:run
-
-# Run all tests
-./mvnw test
-
-# Run a single test class
-./mvnw test -Dtest=ProyectoApplicationTests
-
-# Build (skip tests)
-./mvnw package -DskipTests
-
-# Clean build
-./mvnw clean package
+./mvnw spring-boot:run          # Arrancar
+./mvnw test                     # Tests
+./mvnw test -Dtest=NombreTest   # Test individual
+./mvnw clean package -DskipTests # Build limpio
 ```
 
 ## Architecture
 
-**Package:** `com.reservas_gimnasio.proyecto`
+Capas Spring MVC:
 
-Layered Spring MVC architecture:
+- **`models/`** — Entidades JPA (tablas MySQL)
+- **`Repositories/`** — Interfaces JpaRepository
+- **`Services/`** — Lógica de negocio (TODAS las reglas van aquí)
+- **`Controllers/`** — Endpoints REST, solo reciben/devuelven DTOs
+- **`Dto/`** — `*RequestDTO` (entrada) y `*ResponseDTO` (salida). Nunca exponer entidades
+- **`Exceptions/`** — Excepciones de negocio personalizadas
 
-- **`models/`** — JPA entities mapped to MySQL tables
-- **`Repositories/`** — Spring Data JPA interfaces (extend `JpaRepository`)
-- **`Services/`** — Business logic; injected into controllers
-- **`Controllers/`** — REST endpoints; consume/return DTOs
-- **`Dto/`** — `*RequestDTO` (incoming) and `*ResponseDTO` (outgoing); entities are never exposed directly
-- **`Exceptions/`** — Custom exception classes
-
-**Database:** MySQL in production; H2 in-memory for tests (configured via `application.properties`).
+**BD:** MySQL en producción; H2 en memoria para tests.
 
 ## Domain Model
 
-Four core entities:
-
-| Entity | Description |
+| Entidad | Descripción |
 |---|---|
-| `Usuario` | App user; roles `USER` / `ADMIN` |
-| `Pista` | Sports court; types `TENNIS`, `PADEL`, `FUTBOL` |
-| `Reserva` | Booking linking a user to a court time slot; statuses `CONFIRMED`, `CANCELLED`, `COMPLETED` |
-| `Bloqueo` | Court blockage for maintenance or events (prevents bookings) |
+| `Usuario` | Roles: `USER` / `ADMIN`. Estados: `ACTIVO` / `BLOQUEADO` |
+| `Pista` | Deportes: `TENIS`, `PADEL`, `FUTBOL`. Campo `activa` (boolean) |
+| `Reserva` | Liga usuario + pista + franja horaria. Estados: `CONFIRMED` / `CANCELLED` / `COMPLETED` |
+| `Bloqueo` | Bloqueo de pista (mantenimiento, eventos). Impide reservas |
 
-## Key Business Rules
+Relaciones: Usuario 1:N Reserva, Pista 1:N Reserva, Pista 1:N Bloqueo.
 
-1. No overlapping reservations on the same court.
-2. A slot is only available if there are no existing `Reserva` or `Bloqueo` records for that court/time.
-3. Max **3 active future reservations** per user.
-4. Cancellations require **≥2 hours** notice before the reservation start.
-5. Reservation duration: **1–2 hours**.
-6. Users can only modify/cancel their own reservations; admins are unrestricted.
-7. State transitions: `CONFIRMED → COMPLETED` or `CONFIRMED → CANCELLED` only.
+## Business Rules (MVP)
+
+1. **No solapamiento** de reservas en la misma pista
+2. **Disponibilidad**: slot libre = sin Reserva ni Bloqueo en ese horario
+3. **Max 3 reservas activas futuras** por usuario (solo CONFIRMED con fecha futura)
+4. **Cancelación**: minimo 2h antes del inicio (admins sin restricción)
+5. **Duración**: entre 1 y 2 horas
+6. **Propiedad**: usuarios solo modifican/cancelan las suyas; admins sin restricción
+7. **Transiciones**: solo `CONFIRMED -> COMPLETED` o `CONFIRMED -> CANCELLED`
 
 ## Development Phase
 
-MVP scope: CRUD + validation only. Spring Security is a dependency but auth/authorization is **not** implemented in the initial phase — do not add security constraints to endpoints unless explicitly asked.
+MVP: CRUD + validaciones de negocio. Spring Security es dependencia pero **NO implementar auth/authorization** salvo petición explícita.
 
+## Convenciones
 
-## Idioma y Contexto de respuesta
-
-Hablame siempre en toda circunstancia y pregunta  en español de España.
-
-Este proyecto esta orientado con fines didacticos, tengo una base como programador junior de los fundamentos de springboot, quiero que actues como un profesor. Mi carencia fundamental es que llevo mucho tiempo sin programar en springboot y necesitaré mucha ayuda con la sintaxis. Cuando notes que hay algun concepto que no entiendo o que no estoy siguiendo mandame investigar sobre lo que consideres necesario.
-
-Referencias importantes para este proyecto los encuentras en @idea_bbdd.md y @idea_proyecto.md
+- Clases/métodos: `CamelCase`
+- Columnas BD: `snake_case`
+- Logs: usar `Logger` (SLF4J) en Services para trazar operaciones y errores
+- Errores API: excepciones de negocio capturadas y devueltas con códigos HTTP apropiados
