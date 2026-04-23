@@ -17,14 +17,15 @@ import lombok.ToString;
 //Generacion Getter/Setters
 @Getter
 @Setter
-//Generación constructores con/sin argumentos
+// Generación constructores con/sin argumentos
 @NoArgsConstructor
 @AllArgsConstructor
-//Genera Strings que luego uso para poder hacer trazas
+// Genera Strings que luego uso para poder hacer trazas
 @ToString
-//Le digo que esto es una entidad persistente que representa una tabla en base de datos, cada atributo sera una columna, cada objeto una fila. 
+// Le digo que esto es una entidad persistente que representa una tabla en base
+// de datos, cada atributo sera una columna, cada objeto una fila.
 @Entity
-//damos nombre a la tabla
+// damos nombre a la tabla
 @Table(name = "usuarios")
 public class Usuario {
 
@@ -36,9 +37,9 @@ public class Usuario {
         ACTIVO, BLOQUEADO
     };
 
-    //Identifica el id
+    // Identifica el id
     @Id
-    //Genera valor automaticamente
+    // Genera valor automaticamente
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
