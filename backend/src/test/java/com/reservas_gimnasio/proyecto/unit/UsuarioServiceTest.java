@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -112,6 +113,22 @@ public class UsuarioServiceTest {
         UsuarioResponseDTO resultado = usuarioService.actualizarUsuario(1L, request);
 
         assertEquals("juannuevo@test.com", resultado.getEmail());
+    }
+
+    @Test
+    void eliminarUsuario() {
+
+        Usuario usuario = new Usuario();
+        usuario.setNombre("Juan");
+        usuario.setEmail("juan@test.com");
+        usuario.setId(1L);
+
+        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuario));
+
+        usuarioService.eliminarUsuario(1L);
+
+        verify(usuarioRepository).delete(usuario);
+
     }
 
 }
