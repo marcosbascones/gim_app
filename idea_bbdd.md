@@ -18,17 +18,16 @@
        │ 1
        │
        │ N
-┌──────▼────────┐
-│   Reserva     │
-├───────────────┤
-│ id (PK)       │
-│ usuario_id FK │──────────────┐
-│ pista_id FK   │              │
-│ fecha         │              │
-│ hora_inicio   │              │
-│ hora_fin      │              │
-│ estado        │              │
-└──────┬────────┘              │
+┌──────▼────────────┐
+│   Reserva         │
+├───────────────────┤
+│ id (PK)           │
+│ usuario_id FK     │──────────┐
+│ pista_id FK       │          │
+│ fecha_hora_inicio │          │
+│ fecha_hora_fin    │          │
+│ estado            │          │
+└──────┬────────────┘          │
        │ N                    │ 1
        ▼                     │
 ┌───────────────┐           │
@@ -47,9 +46,9 @@
 ├───────────────┤        │
 │ id (PK)       │        │
 │ pista_id FK   │────────┘
-│ inicio        │
-│ fin           │
-│ motivo        │
+│ fecha_hora_inicio │
+│ fecha_hora_fin    │
+│ motivo            │
 └───────────────┘
 
 -USUARIO
@@ -73,7 +72,6 @@ activa (boolean)
 id (PK)
 usuario_id (FK → Usuario)
 pista_id (FK → Pista)
-fecha
 fechaHoraInicio (LocalDateTime)
 fechaHoraFin (LocalDateTime)
 estado:
@@ -87,8 +85,8 @@ estado:
 
 id (PK)
 pista_id (FK → Pista)
-inicio
-fin
+fechaHoraInicio (LocalDateTime)
+fechaHoraFin (LocalDateTime)
 motivo (mantenimiento, lluvia, evento, etc.)
 
 

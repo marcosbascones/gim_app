@@ -65,9 +65,8 @@ Puede:
 - id
 - usuario
 - pista
-- fecha
-- horaInicio
-- horaFin
+- fechaHoraInicio (LocalDateTime)
+- fechaHoraFin (LocalDateTime)
 - estado:
   
   - CONFIRMED

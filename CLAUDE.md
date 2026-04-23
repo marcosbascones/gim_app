@@ -50,6 +50,8 @@ Capas Spring MVC:
 
 Relaciones: Usuario 1:N Reserva, Pista 1:N Reserva, Pista 1:N Bloqueo.
 
+**Fuente de verdad del modelo:** `idea_proyecto.md` e `idea_bbdd.md`. Consultar siempre estos ficheros antes de crear o modificar entidades — la tabla de arriba es solo un resumen.
+
 ## Business Rules (MVP)
 
 1. **No solapamiento** de reservas en la misma pista
