@@ -16,8 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.reservas_gimnasio.proyecto.Dto.usuario.UsuarioRequestDTO;
-import com.reservas_gimnasio.proyecto.Dto.usuario.UsuarioResponseDTO;
+import com.reservas_gimnasio.proyecto.Dto.Usuario.UsuarioRequestDTO;
+import com.reservas_gimnasio.proyecto.Dto.Usuario.UsuarioResponseDTO;
 import com.reservas_gimnasio.proyecto.Repositories.UsuarioRepository;
 import com.reservas_gimnasio.proyecto.Services.UsuarioService;
 import com.reservas_gimnasio.proyecto.models.Usuario;

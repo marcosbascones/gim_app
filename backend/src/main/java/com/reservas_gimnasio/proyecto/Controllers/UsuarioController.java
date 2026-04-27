@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.reservas_gimnasio.proyecto.Dto.usuario.UsuarioRequestDTO;
-import com.reservas_gimnasio.proyecto.Dto.usuario.UsuarioResponseDTO;
+import com.reservas_gimnasio.proyecto.Dto.Usuario.UsuarioRequestDTO;
+import com.reservas_gimnasio.proyecto.Dto.Usuario.UsuarioResponseDTO;
 import com.reservas_gimnasio.proyecto.Services.UsuarioService;
 
 @RestController

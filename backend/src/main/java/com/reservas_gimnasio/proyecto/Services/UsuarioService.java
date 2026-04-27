@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.reservas_gimnasio.proyecto.Dto.usuario.UsuarioRequestDTO;
-import com.reservas_gimnasio.proyecto.Dto.usuario.UsuarioResponseDTO;
+import com.reservas_gimnasio.proyecto.Dto.Usuario.UsuarioRequestDTO;
+import com.reservas_gimnasio.proyecto.Dto.Usuario.UsuarioResponseDTO;
 import com.reservas_gimnasio.proyecto.Repositories.UsuarioRepository;
 import com.reservas_gimnasio.proyecto.models.Usuario;
 
