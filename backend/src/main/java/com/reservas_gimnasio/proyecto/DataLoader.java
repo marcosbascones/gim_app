@@ -3,7 +3,9 @@ package com.reservas_gimnasio.proyecto;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import com.reservas_gimnasio.proyecto.Repositories.PistaRepository;
 import com.reservas_gimnasio.proyecto.Repositories.UsuarioRepository;
+import com.reservas_gimnasio.proyecto.models.Pista;
 import com.reservas_gimnasio.proyecto.models.Usuario;
 
 //Para inyectarlo en otras clases 
@@ -14,9 +16,11 @@ import com.reservas_gimnasio.proyecto.models.Usuario;
 public class DataLoader implements CommandLineRunner {
 
     private final UsuarioRepository usuarioRepository;
+    private final PistaRepository pistaRepository;
 
-    public DataLoader(UsuarioRepository usuarioRepository) {
+    public DataLoader(UsuarioRepository usuarioRepository, PistaRepository pistaRepository) {
         this.usuarioRepository = usuarioRepository;
+        this.pistaRepository = pistaRepository;
     }
 
     @Override
@@ -33,6 +37,11 @@ public class DataLoader implements CommandLineRunner {
                 "1234",
                 Usuario.Rol.ADMIN,
                 Usuario.Estado.ACTIVO));
+
+        pistaRepository.save(new Pista(null, "Pista Tenis 1", true, Pista.Deporte.TENIS));
+        pistaRepository.save(new Pista(null, "Pista Tenis 2", true, Pista.Deporte.TENIS));
+        pistaRepository.save(new Pista(null, "Pista Padel 1", true, Pista.Deporte.PADEL));
+        pistaRepository.save(new Pista(null, "Pista Futbol 1", false, Pista.Deporte.FUTBOL));
 
     }
 
