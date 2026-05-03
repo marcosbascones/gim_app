@@ -17,16 +17,20 @@ public class BloqueoService {
 
     private final PistaRepository pistaRepository;
 
-    private static final Logger logger= LoggerFactory.getLogger(BloqueoService.class);
+    private static final Logger logger = LoggerFactory.getLogger(BloqueoService.class);
 
-    public BloqueoService (BloqueoRepository bloqueoRepository, PistaRepository pistaRepository){
-        this.bloqueoRepository= bloqueoRepository;
-        this.pistaRepository= pistaRepository;
+    public BloqueoService(BloqueoRepository bloqueoRepository, PistaRepository pistaRepository) {
+        this.bloqueoRepository = bloqueoRepository;
+        this.pistaRepository = pistaRepository;
     }
 
-    public BloqueoResponseDTO crearBloqueo( BloqueoRequestDTO requestDTO){
+    public BloqueoResponseDTO crearBloqueo(BloqueoRequestDTO requestDTO) {
 
-        if(!bloqueoRepository.findByPistaAndFechaHoraInicioBeforeAndFechaHoraFinAfter(requestDTO.getPistaId(), requestDTO.getFechaHoraInicio(), requestDTO.getFechaHoraFin()).isEmpty()){
+        if (!bloqueoRepository.findByPistaAndFechaHoraInicioBeforeAndFechaHoraFinAfter(
+                pistaRepository.findById(requestDTO.getPistaId())
+                        .orElseThrow(() -> new RuntimeException("Pista no encontrada")),
+                requestDTO.getFechaHoraInicio(),
+                requestDTO.getFechaHoraFin()).isEmpty()) {
             throw new RuntimeException("Bloqueo ya creado");
         }
 
@@ -38,14 +42,15 @@ public class BloqueoService {
 
         bloqueo.setMotivo(requestDTO.getMotivo());
 
-        bloqueo.setPista(pistaRepository.findById(requestDTO.getPistaId())  .orElseThrow(() -> new RuntimeException("Pista no encontrada")));
+        bloqueo.setPista(pistaRepository.findById(requestDTO.getPistaId())
+                .orElseThrow(() -> new RuntimeException("Pista no encontrada")));
 
         Bloqueo guardado = bloqueoRepository.save(bloqueo);
 
         logger.info("Bloqueo creada: {}", guardado);
 
-        return new BloqueoResponseDTO(guardado.getId(), guardado.getPista().getId(), guardado.getPista().getNombre(), guardado.getFechaHoraInicio(), guardado.getFechaHoraFin(), guardado.getMotivo());
+        return new BloqueoResponseDTO(guardado.getId(), guardado.getPista().getId(), guardado.getPista().getNombre(),
+                guardado.getFechaHoraInicio(), guardado.getFechaHoraFin(), guardado.getMotivo());
     }
-
 
 }
