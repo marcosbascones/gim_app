@@ -26,6 +26,7 @@ public class BloqueoService {
 
     public BloqueoResponseDTO crearBloqueo(BloqueoRequestDTO requestDTO) {
 
+        //Si la pista no esta vacia tira la excepcion fijate en el ! y el es empty es todo la misma frase.
         if (!bloqueoRepository.findByPistaAndFechaHoraInicioBeforeAndFechaHoraFinAfter(
                 pistaRepository.findById(requestDTO.getPistaId())
                         .orElseThrow(() -> new RuntimeException("Pista no encontrada")),
