@@ -79,4 +79,13 @@ public class BloqueoService {
                 .collect(Collectors.toList());
     }
 
+    public void eliminarBloqueo(Long id) {
+        Bloqueo bloqueo = bloqueoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No existe bloqueo con id: " + id));
+
+        bloqueoRepository.delete(bloqueo);
+
+        logger.info("bloqueo con id: {} eliminada", id);
+    }
+
 }
