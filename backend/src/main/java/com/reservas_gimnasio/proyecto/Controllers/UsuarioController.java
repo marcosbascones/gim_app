@@ -2,7 +2,7 @@ package com.reservas_gimnasio.proyecto.Controllers;
 
 import java.util.List;
 
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,23 +40,19 @@ public class UsuarioController {
     }
 
     @PostMapping
-
-    public UsuarioResponseDTO crearUsuario(@RequestBody UsuarioRequestDTO request) {
-
-        return usuarioService.crearUsuario(request);
+    public ResponseEntity<UsuarioResponseDTO> crearUsuario(@RequestBody UsuarioRequestDTO request) {
+        return ResponseEntity.status(201).body(usuarioService.crearUsuario(request));
     }
 
     @PutMapping("/{id}")
-
-    public UsuarioResponseDTO actualizarUsuario(@PathVariable Long id, @RequestBody UsuarioRequestDTO request) {
-
-        return usuarioService.actualizarUsuario(id, request);
+    public ResponseEntity<UsuarioResponseDTO> actualizarUsuario(@PathVariable Long id, @RequestBody UsuarioRequestDTO request) {
+        return ResponseEntity.ok(usuarioService.actualizarUsuario(id, request));
     }
 
     @DeleteMapping("/{id}")
-
-    public void eliminarUsuario(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
         usuarioService.eliminarUsuario(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

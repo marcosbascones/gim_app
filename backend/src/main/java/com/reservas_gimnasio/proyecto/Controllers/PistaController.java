@@ -2,6 +2,7 @@ package com.reservas_gimnasio.proyecto.Controllers;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,17 +38,18 @@ public class PistaController {
     }
 
     @PostMapping
-    public PistaResponseDTO crearPista(@RequestBody PistaRequestDTO request) {
-        return pistaService.crearPista(request);
+    public ResponseEntity<PistaResponseDTO> crearPista(@RequestBody PistaRequestDTO request) {
+        return ResponseEntity.status(201).body(pistaService.crearPista(request));
     }
 
     @PutMapping("/{id}")
-    public PistaResponseDTO actualizarPista(@PathVariable Long id, @RequestBody PistaRequestDTO request) {
-        return pistaService.actualizarPista(id, request);
+    public ResponseEntity<PistaResponseDTO> actualizarPista(@PathVariable Long id, @RequestBody PistaRequestDTO request) {
+        return ResponseEntity.ok(pistaService.actualizarPista(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public void eliminarPista(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarPista(@PathVariable Long id) {
         pistaService.eliminarPista(id);
+        return ResponseEntity.noContent().build();
     }
 }
