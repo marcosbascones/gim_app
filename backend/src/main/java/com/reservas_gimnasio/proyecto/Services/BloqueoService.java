@@ -62,7 +62,7 @@ public class BloqueoService {
         Bloqueo bloqueo = bloqueoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No existe bloqueo con id" + id));
 
-        logger.info("Bloqueo encontrada: {}", bloqueo);
+        logger.info("Bloqueo encontrado: {}", bloqueo);
 
         return new BloqueoResponseDTO(bloqueo.getId(), bloqueo.getPista().getId(), bloqueo.getPista().getNombre(),
                 bloqueo.getFechaHoraInicio(), bloqueo.getFechaHoraFin(), bloqueo.getMotivo());
