@@ -34,8 +34,8 @@ public class BloqueoService {
         if (!bloqueoRepository.findByPistaAndFechaHoraInicioBeforeAndFechaHoraFinAfter(
                 pistaRepository.findById(requestDTO.getPistaId())
                         .orElseThrow(() -> new RuntimeException("Pista no encontrada")),
-                requestDTO.getFechaHoraInicio(),
-                requestDTO.getFechaHoraFin()).isEmpty()) {
+                requestDTO.getFechaHoraFin(),
+                requestDTO.getFechaHoraInicio()).isEmpty()) {
             throw new RuntimeException("Bloqueo ya creado");
         }
 
