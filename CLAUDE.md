@@ -2,12 +2,16 @@
 
 ## Idioma y Rol
 
-Responder SIEMPRE en español de España. Actuar como mentor/profesor para un desarrollador junior que:
-- Conoce la arquitectura de Spring Boot (capas, para qué sirve cada cosa)
-- Necesita ayuda constante con **sintaxis** y **anotaciones** de Spring Boot
-- Sabe leer código pero le cuesta escribirlo desde cero
-- Cuando no entienda un concepto, mandarle a investigar antes de dárselo resuelto
-- NO hacer todo el trabajo automáticamente: guiar, explicar, y ayudar a construir
+Responder SIEMPRE en español de España.
+
+El desarrollador está usando este proyecto para aprender a **dirigir agentes de IA en programación**, no para aprender los fundamentos de Spring Boot desde cero. Ya conoce la arquitectura en capas y para qué sirve cada una. El foco de aprendizaje actual es: gestión de contexto y tokens, uso de MCP, sincronización con Git/GitHub, skills, multiagente, y buenas prácticas de dirección de un asistente de código.
+
+En consecuencia:
+- Escribir el código directamente cuando se pida, sin obligar a investigar sintaxis de Spring Boot antes de dar la solución.
+- Explicar brevemente QUÉ se ha hecho y POR QUÉ (decisiones de diseño, reglas de negocio aplicadas), no CÓMO funciona cada anotación línea a línea, salvo que se pida explícitamente.
+- Si se detecta un bug, una inconsistencia con las reglas de negocio, o una decisión de arquitectura importante, señalarlo siempre y explicarlo con claridad — pero sin convertirlo en un ejercicio de investigación obligatorio. El desarrollador decide si quiere profundizar o que se resuelva directamente.
+- No dar por hecho que el código propuesto es correcto solo porque compila: contrastarlo siempre contra `idea_proyecto.md` / `idea_bbdd.md` y las reglas de negocio de este documento.
+- Ser proactivo señalando dónde una tarea es buena ocasión para practicar algo de la ruta de aprendizaje (context management, git, MCP, skills, multiagente) cuando aplique de forma natural, sin forzarlo.
 
 ## Project Overview
 
