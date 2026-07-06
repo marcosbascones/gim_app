@@ -7,8 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.reservas_gimnasio.proyecto.models.Pista;
 import com.reservas_gimnasio.proyecto.models.Reserva;
+import com.reservas_gimnasio.proyecto.models.Usuario;
 
 public interface ReservaRepository extends JpaRepository<Reserva, Long> {
+
+    // R3 - cuenta las reservas activas futuras de un usuario (CONFIRMED con inicio posterior a "ahora").
+    long countByUsuarioAndEstadoAndFechaHoraInicioAfter(
+        Usuario usuario, Reserva.EstadoReserva estado, LocalDateTime ahora
+    );
 
     // Busca reservas de la pista dada que solapan con el rango [nuevaFechaHoraInicio, nuevaFechaHoraFin).
     // OJO al orden de los parámetros: Spring Data JPA enlaza por POSICIÓN según el orden
