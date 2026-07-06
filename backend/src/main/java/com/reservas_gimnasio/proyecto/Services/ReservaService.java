@@ -1,6 +1,7 @@
 package com.reservas_gimnasio.proyecto.Services;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -41,6 +42,11 @@ public class ReservaService {
     }
 
     public ReservaResponseDTO crearReserva(ReservaRequestDTO requestDTO) {
+
+        // La reserva debe empezar en el futuro: no se admite el instante actual ni el pasado.
+        if (!requestDTO.getFechaHoraInicio().isAfter(LocalDateTime.now())) {
+            throw new ReglaNegocioException("La fecha y hora de inicio debe ser posterior al momento actual");
+        }
 
         // R6 - la reserva debe durar entre 1 y 2 horas, ambos inclusive.
         Duration duracion = Duration.between(requestDTO.getFechaHoraInicio(), requestDTO.getFechaHoraFin());
