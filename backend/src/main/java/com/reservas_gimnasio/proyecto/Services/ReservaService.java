@@ -112,4 +112,51 @@ public class ReservaService {
 				guardada.getFechaHoraInicio(), guardada.getFechaHoraFin(), guardada.getEstado());
 	}
 
+	public ReservaResponseDTO cancelarReserva(Long reservaId, Long usuarioSolicitanteId) {
+
+		Reserva reserva = reservaRepository.findById(reservaId)
+				.orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+
+		// R5 - solo se pueden cancelar reservas CONFIRMED. No depende de quién pide la
+		// cancelación, así que se comprueba primero y sin necesidad de cargar el usuario.
+		if (reserva.getEstado() != Reserva.EstadoReserva.CONFIRMED) {
+			throw new ReglaNegocioException("Solo se pueden cancelar reservas confirmadas");
+		}
+
+		Usuario usuarioSolicitante = usuarioRepository.findById(usuarioSolicitanteId)
+				.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+		boolean esDueno = reserva.getUsuario().getId().equals(usuarioSolicitante.getId());
+		boolean esAdmin = usuarioSolicitante.getRol() == Usuario.Rol.ADMIN;
+
+		// R7 - solo el dueño de la reserva o un ADMIN pueden cancelarla. Es una
+		// comprobación de autorización: debe ir antes que R4 para no evaluar una regla
+		// de negocio (el margen de 2h) sobre alguien que ni siquiera tiene permiso.
+		if (!esDueno && !esAdmin) {
+			throw new ReglaNegocioException("No autorizado para cancelar esta reserva");
+		}
+
+		// R4 - un usuario normal solo puede cancelar con más de 2h de antelación; los
+		// admins quedan exentos de esta restricción.
+		if (!esAdmin) {
+			Duration margen = Duration.between(LocalDateTime.now(), reserva.getFechaHoraInicio());
+
+			if (margen.toMinutes() < 120) {
+				throw new ReglaNegocioException(
+						"Solo se puede cancelar una reserva con más de 2 horas de antelación");
+			}
+		}
+
+		reserva.setEstado(Reserva.EstadoReserva.CANCELLED);
+
+		Reserva guardada = reservaRepository.save(reserva);
+
+		logger.info("Reserva cancelada: {}", guardada);
+
+		return new ReservaResponseDTO(guardada.getId(), guardada.getUsuario().getId(),
+				guardada.getUsuario().getNombre(), guardada.getPista().getId(),
+				guardada.getPista().getNombre(),
+				guardada.getFechaHoraInicio(), guardada.getFechaHoraFin(), guardada.getEstado());
+	}
+
 }
