@@ -16,6 +16,10 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
         Usuario usuario, Reserva.EstadoReserva estado, LocalDateTime ahora
     );
 
+    // R5 (parte automática) - busca reservas CONFIRMED cuya fechaHoraFin ya haya pasado, para
+    // marcarlas como COMPLETED.
+    List<Reserva> findByEstadoAndFechaHoraFinBefore(Reserva.EstadoReserva estado, LocalDateTime ahora);
+
     // Busca reservas de la pista dada que solapan con el rango [nuevaFechaHoraInicio, nuevaFechaHoraFin).
     // OJO al orden de los parámetros: Spring Data JPA enlaza por POSICIÓN según el orden
     // de las cláusulas del nombre del método, no por el nombre que le pongas al parámetro.

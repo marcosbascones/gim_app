@@ -159,4 +159,16 @@ public class ReservaService {
 				guardada.getFechaHoraInicio(), guardada.getFechaHoraFin(), guardada.getEstado());
 	}
 
+	public void marcarReservasVencidasComoCompletadas() {
+
+		List<Reserva> reservasVencidas = reservaRepository.findByEstadoAndFechaHoraFinBefore(
+				Reserva.EstadoReserva.CONFIRMED, LocalDateTime.now());
+
+		reservasVencidas.forEach(reserva -> reserva.setEstado(Reserva.EstadoReserva.COMPLETED));
+
+		reservaRepository.saveAll(reservasVencidas);
+
+		logger.info("Reservas marcadas como COMPLETED: {}", reservasVencidas.size());
+	}
+
 }
