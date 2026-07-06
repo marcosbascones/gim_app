@@ -1,6 +1,7 @@
 package com.reservas_gimnasio.proyecto.Services;
 
 import java.time.Duration;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +10,11 @@ import org.springframework.stereotype.Service;
 import com.reservas_gimnasio.proyecto.Dto.Reserva.ReservaRequestDTO;
 import com.reservas_gimnasio.proyecto.Dto.Reserva.ReservaResponseDTO;
 import com.reservas_gimnasio.proyecto.Exceptions.ReglaNegocioException;
+import com.reservas_gimnasio.proyecto.Repositories.BloqueoRepository;
 import com.reservas_gimnasio.proyecto.Repositories.PistaRepository;
 import com.reservas_gimnasio.proyecto.Repositories.ReservaRepository;
 import com.reservas_gimnasio.proyecto.Repositories.UsuarioRepository;
+import com.reservas_gimnasio.proyecto.models.Bloqueo;
 import com.reservas_gimnasio.proyecto.models.Pista;
 import com.reservas_gimnasio.proyecto.models.Reserva;
 import com.reservas_gimnasio.proyecto.models.Usuario;
@@ -25,13 +28,16 @@ public class ReservaService {
 
     private final PistaRepository pistaRepository;
 
+    private final BloqueoRepository bloqueoRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(ReservaService.class);
 
     public ReservaService(ReservaRepository reservaRepository, UsuarioRepository usuarioRepository,
-            PistaRepository pistaRepository) {
+            PistaRepository pistaRepository, BloqueoRepository bloqueoRepository) {
         this.reservaRepository = reservaRepository;
         this.usuarioRepository = usuarioRepository;
         this.pistaRepository = pistaRepository;
+        this.bloqueoRepository = bloqueoRepository;
     }
 
     public ReservaResponseDTO crearReserva(ReservaRequestDTO requestDTO) {
@@ -48,6 +54,25 @@ public class ReservaService {
 
         Pista pista = pistaRepository.findById(requestDTO.getPistaId())
                 .orElseThrow(() -> new RuntimeException("Pista no encontrada"));
+
+        // R1 - no puede solaparse con otra reserva de la misma pista que no esté cancelada.
+        List<Reserva> reservasSolapadas = reservaRepository.findByPistaAndFechaHoraInicioBeforeAndFechaHoraFinAfter(
+                pista, requestDTO.getFechaHoraFin(), requestDTO.getFechaHoraInicio());
+
+        boolean hayReservaSolapada = reservasSolapadas.stream()
+                .anyMatch(r -> r.getEstado() != Reserva.EstadoReserva.CANCELLED);
+
+        if (hayReservaSolapada) {
+            throw new ReglaNegocioException("Ya existe una reserva para esa pista en ese horario");
+        }
+
+        // R2 - la pista no debe estar bloqueada (mantenimiento, eventos) en ese horario.
+        List<Bloqueo> bloqueosSolapados = bloqueoRepository.findByPistaAndFechaHoraInicioBeforeAndFechaHoraFinAfter(
+                pista, requestDTO.getFechaHoraFin(), requestDTO.getFechaHoraInicio());
+
+        if (!bloqueosSolapados.isEmpty()) {
+            throw new ReglaNegocioException("La pista está bloqueada en ese horario");
+        }
 
         Reserva reserva = new Reserva();
 
