@@ -4,9 +4,9 @@
 
 ## Tests pendientes de Reserva
 
-- Test de integración con @DataJpaTest para ReservaRepository.findByPistaAndFechaHoraInicioBeforeAndFechaHoraFinAfter, con el mismo enfoque que el de Bloqueo: verificar solapamiento parcial real contra BD, no con mocks con any().
-- Test de integración con @DataJpaTest para ReservaRepository.countByUsuarioAndEstadoAndFechaHoraInicioAfter (R3): comprobar que solo cuenta CONFIRMED futuras y que ignora CANCELLED/COMPLETED o reservas ya pasadas.
-- Test de integración con @DataJpaTest para ReservaRepository.findByEstadoAndFechaHoraFinBefore (R5 automático): comprobar que solo devuelve CONFIRMED con fechaHoraFin pasada.
+- [x] Test de integración con @DataJpaTest para ReservaRepository.findByPistaAndFechaHoraInicioBeforeAndFechaHoraFinAfter, con el mismo enfoque que el de Bloqueo: verificar solapamiento parcial real contra BD, no con mocks con any().
+- [x] Test de integración con @DataJpaTest para ReservaRepository.countByUsuarioAndEstadoAndFechaHoraInicioAfter (R3): comprobar que solo cuenta CONFIRMED futuras y que ignora CANCELLED/COMPLETED o reservas ya pasadas.
+- [x] Test de integración con @DataJpaTest para ReservaRepository.findByEstadoAndFechaHoraFinBefore (R5 automático): comprobar que solo devuelve CONFIRMED con fechaHoraFin pasada.
 - Tests unitarios de ReservaService.crearReserva:
   - Fecha de inicio en el pasado o igual a "ahora" → ReglaNegocioException.
   - Duración < 1h o > 2h (R6) → ReglaNegocioException.
