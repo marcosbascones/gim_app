@@ -2,7 +2,10 @@ package com.reservas_gimnasio.proyecto.unit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
@@ -11,6 +14,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -403,6 +407,51 @@ void cancelarReservaOrdenValidacionesR5AntesQueR7() {
     when(reservaRepository.findById(1L)).thenReturn(Optional.of(reserva));
 
     assertThrows(ReglaNegocioException.class, () -> reservaService.cancelarReserva(1L, 99L));
+}
+
+
+// ---------- marcarReservasVencidasComoCompletadas ----------
+
+@SuppressWarnings("unchecked")
+@Test
+void marcarReservasVencidasComoCompletadasActualizaLasQueDevuelveElRepositorio() {
+    Reserva vencida1 = new Reserva();
+    vencida1.setId(1L);
+    vencida1.setEstado(Reserva.EstadoReserva.CONFIRMED);
+
+    Reserva vencida2 = new Reserva();
+    vencida2.setId(2L);
+    vencida2.setEstado(Reserva.EstadoReserva.CONFIRMED);
+
+    // El propio repositorio ya filtra por CONFIRMED + fechaHoraFin pasada (probado
+    // en ReservaRepositoryTest); aquí solo simulamos ese resultado exacto, sin
+    // any() indiscriminado: el estado se fija con eq() y solo el instante de
+    // "ahora" usa any(LocalDateTime.class), porque el Service lo calcula
+    // internamente y no es predecible desde el test.
+    when(reservaRepository.findByEstadoAndFechaHoraFinBefore(
+        eq(Reserva.EstadoReserva.CONFIRMED), any(LocalDateTime.class)
+    )).thenReturn(List.of(vencida1, vencida2));
+
+    reservaService.marcarReservasVencidasComoCompletadas();
+
+    ArgumentCaptor<List<Reserva>> captor = ArgumentCaptor.forClass(List.class);
+    verify(reservaRepository).saveAll(captor.capture());
+
+    List<Reserva> guardadas = captor.getValue();
+
+    assertEquals(2, guardadas.size());
+    assertTrue(guardadas.stream().allMatch(r -> r.getEstado() == Reserva.EstadoReserva.COMPLETED));
+}
+
+@Test
+void marcarReservasVencidasComoCompletadasSinReservasVencidasGuardaListaVacia() {
+    when(reservaRepository.findByEstadoAndFechaHoraFinBefore(
+        eq(Reserva.EstadoReserva.CONFIRMED), any(LocalDateTime.class)
+    )).thenReturn(List.of());
+
+    reservaService.marcarReservasVencidasComoCompletadas();
+
+    verify(reservaRepository).saveAll(List.of());
 }
 
 }
