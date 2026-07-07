@@ -40,7 +40,7 @@ public class PistaControllerTest {
         mockMvc.perform(post("/pistas")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"nombre\":\"Pista Test\",\"deporte\":\"TENIS\",\"activa\":true}"))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -54,6 +54,6 @@ public class PistaControllerTest {
     @Test
     void eliminarPista() throws Exception {
         mockMvc.perform(delete("/pistas/1"))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 }

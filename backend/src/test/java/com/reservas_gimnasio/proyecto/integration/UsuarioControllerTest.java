@@ -40,7 +40,7 @@ public class UsuarioControllerTest {
         mockMvc.perform(post("/usuarios")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"nombre\":\"Test\",\"email\":\"test@test.com\",\"password\":\"1234\",\"rol\":\"USER\"}"))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
     }
 
@@ -55,7 +55,8 @@ public class UsuarioControllerTest {
 
     @Test
     void eliminarUsuario() throws Exception {
-        delete("/usuarios/1");
+        mockMvc.perform(delete("/usuarios/1"))
+                .andExpect(status().isNoContent());
     }
 
 }
