@@ -24,3 +24,7 @@
   - Verificar el orden de las validaciones: una reserva no-CONFIRMED debe fallar por R5 incluso si además el solicitante no está autorizado (para confirmar que R5 se comprueba antes que R7).
 - Test de ReservaService.marcarReservasVencidasComoCompletadas: reservas CONFIRMED con fechaHoraFin pasada pasan a COMPLETED; las que no han vencido o no están CONFIRMED no se tocan.
 - Test de integración (contexto Spring) que confirme que @EnableScheduling está activo y que ReservaScheduler invoca al método del Service (puede ser un test simple invocando el método del scheduler directamente, ya que probar el disparo real del @Scheduled con fixedRate=900000 no es práctico en un test).
+
+## Mejoras transversales pendientes
+
+- Implementar un @ControllerAdvice global en Exceptions/ que capture ReglaNegocioException (y las RuntimeException de "no encontrado") y las traduzca a códigos HTTP apropiados (400/404) en vez del 500 genérico actual. Afecta a BloqueoController, PistaController, UsuarioController y ReservaController por igual — debe implementarse una sola vez para las cuatro entidades, no de forma aislada.
