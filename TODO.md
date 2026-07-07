@@ -23,7 +23,7 @@
   - ADMIN cancelando con menos de 2h de antelación → se cancela igualmente (sin restricción R4).
   - Verificar el orden de las validaciones: una reserva no-CONFIRMED debe fallar por R5 incluso si además el solicitante no está autorizado (para confirmar que R5 se comprueba antes que R7).
 - [x] Test de ReservaService.marcarReservasVencidasComoCompletadas: reservas CONFIRMED con fechaHoraFin pasada pasan a COMPLETED; las que no han vencido o no están CONFIRMED no se tocan.
-- Test de integración (contexto Spring) que confirme que @EnableScheduling está activo y que ReservaScheduler invoca al método del Service (puede ser un test simple invocando el método del scheduler directamente, ya que probar el disparo real del @Scheduled con fixedRate=900000 no es práctico en un test).
+- [x] Test de integración (contexto Spring) que confirme que @EnableScheduling está activo y que ReservaScheduler invoca al método del Service (puede ser un test simple invocando el método del scheduler directamente, ya que probar el disparo real del @Scheduled con fixedRate=900000 no es práctico en un test).
 
 ## Mejoras transversales pendientes
 
