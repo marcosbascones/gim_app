@@ -7,14 +7,14 @@
 - [x] Test de integración con @DataJpaTest para ReservaRepository.findByPistaAndFechaHoraInicioBeforeAndFechaHoraFinAfter, con el mismo enfoque que el de Bloqueo: verificar solapamiento parcial real contra BD, no con mocks con any().
 - [x] Test de integración con @DataJpaTest para ReservaRepository.countByUsuarioAndEstadoAndFechaHoraInicioAfter (R3): comprobar que solo cuenta CONFIRMED futuras y que ignora CANCELLED/COMPLETED o reservas ya pasadas.
 - [x] Test de integración con @DataJpaTest para ReservaRepository.findByEstadoAndFechaHoraFinBefore (R5 automático): comprobar que solo devuelve CONFIRMED con fechaHoraFin pasada.
-- Tests unitarios de ReservaService.crearReserva:
+- [x] Tests unitarios de ReservaService.crearReserva:
   - Fecha de inicio en el pasado o igual a "ahora" → ReglaNegocioException.
   - Duración < 1h o > 2h (R6) → ReglaNegocioException.
   - Usuario con 3 reservas activas futuras (R3) → ReglaNegocioException; con 2 → se crea sin problema.
   - Solapamiento con otra reserva no cancelada (R1) → ReglaNegocioException; solapamiento solo con una CANCELLED → no bloquea.
   - Solapamiento con un bloqueo (R2) → ReglaNegocioException.
   - Caso feliz: se guarda con estado CONFIRMED y el DTO de respuesta es correcto.
-- Tests unitarios de ReservaService.cancelarReserva:
+- [x] Tests unitarios de ReservaService.cancelarReserva:
   - Reserva no encontrada → excepción.
   - Reserva no CONFIRMED (ya CANCELLED o COMPLETED) → ReglaNegocioException (R5).
   - Usuario solicitante que no es ni el dueño ni ADMIN → ReglaNegocioException (R7).
