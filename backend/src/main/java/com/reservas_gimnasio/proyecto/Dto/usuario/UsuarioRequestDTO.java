@@ -1,4 +1,4 @@
-package com.reservas_gimnasio.proyecto.Dto.Usuario;
+package com.reservas_gimnasio.proyecto.Dto.usuario;
 
 import com.reservas_gimnasio.proyecto.models.Usuario;
 
