@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.reservas_gimnasio.proyecto.Dto.Bloqueo.BloqueoRequestDTO;
 import com.reservas_gimnasio.proyecto.Dto.Bloqueo.BloqueoResponseDTO;
+import com.reservas_gimnasio.proyecto.Exceptions.RecursoNoEncontradoException;
+import com.reservas_gimnasio.proyecto.Exceptions.ReglaNegocioException;
 import com.reservas_gimnasio.proyecto.Repositories.BloqueoRepository;
 import com.reservas_gimnasio.proyecto.Repositories.PistaRepository;
 import com.reservas_gimnasio.proyecto.models.Bloqueo;
@@ -33,10 +35,10 @@ public class BloqueoService {
         // todo la misma frase.
         if (!bloqueoRepository.findByPistaAndFechaHoraInicioBeforeAndFechaHoraFinAfter(
                 pistaRepository.findById(requestDTO.getPistaId())
-                        .orElseThrow(() -> new RuntimeException("Pista no encontrada")),
+                        .orElseThrow(() -> new RecursoNoEncontradoException("Pista no encontrada")),
                 requestDTO.getFechaHoraFin(),
                 requestDTO.getFechaHoraInicio()).isEmpty()) {
-            throw new RuntimeException("Bloqueo ya creado");
+            throw new ReglaNegocioException("Bloqueo ya creado");
         }
 
         Bloqueo bloqueo = new Bloqueo();
@@ -48,7 +50,7 @@ public class BloqueoService {
         bloqueo.setMotivo(requestDTO.getMotivo());
 
         bloqueo.setPista(pistaRepository.findById(requestDTO.getPistaId())
-                .orElseThrow(() -> new RuntimeException("Pista no encontrada")));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Pista no encontrada")));
 
         Bloqueo guardado = bloqueoRepository.save(bloqueo);
 
@@ -60,7 +62,7 @@ public class BloqueoService {
 
     public BloqueoResponseDTO obtenerBloqueoPorId(Long id) {
         Bloqueo bloqueo = bloqueoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No existe bloqueo con id" + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe bloqueo con id" + id));
 
         logger.info("Bloqueo encontrado: {}", bloqueo);
 
@@ -81,7 +83,7 @@ public class BloqueoService {
 
     public void eliminarBloqueo(Long id) {
         Bloqueo bloqueo = bloqueoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No existe bloqueo con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe bloqueo con id: " + id));
 
         bloqueoRepository.delete(bloqueo);
 

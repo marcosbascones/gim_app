@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.reservas_gimnasio.proyecto.Dto.Reserva.ReservaRequestDTO;
 import com.reservas_gimnasio.proyecto.Dto.Reserva.ReservaResponseDTO;
+import com.reservas_gimnasio.proyecto.Exceptions.RecursoNoEncontradoException;
 import com.reservas_gimnasio.proyecto.Exceptions.ReglaNegocioException;
 import com.reservas_gimnasio.proyecto.Repositories.BloqueoRepository;
 import com.reservas_gimnasio.proyecto.Repositories.PistaRepository;
@@ -58,7 +59,7 @@ public class ReservaService {
 		}
 
 		Usuario usuario = usuarioRepository.findById(requestDTO.getUsuarioId())
-				.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado"));
 
 		// R3 - máximo 3 reservas activas futuras (CONFIRMED con inicio en el futuro) por usuario.
 		long reservasActivasFuturas = reservaRepository.countByUsuarioAndEstadoAndFechaHoraInicioAfter(
@@ -69,7 +70,7 @@ public class ReservaService {
 		}
 
 		Pista pista = pistaRepository.findById(requestDTO.getPistaId())
-				.orElseThrow(() -> new RuntimeException("Pista no encontrada"));
+				.orElseThrow(() -> new RecursoNoEncontradoException("Pista no encontrada"));
 
 		// R1 - no puede solaparse con otra reserva de la misma pista que no esté
 		// cancelada.
@@ -115,7 +116,7 @@ public class ReservaService {
 	public ReservaResponseDTO cancelarReserva(Long reservaId, Long usuarioSolicitanteId) {
 
 		Reserva reserva = reservaRepository.findById(reservaId)
-				.orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+				.orElseThrow(() -> new RecursoNoEncontradoException("Reserva no encontrada"));
 
 		// R5 - solo se pueden cancelar reservas CONFIRMED. No depende de quién pide la
 		// cancelación, así que se comprueba primero y sin necesidad de cargar el usuario.
@@ -124,7 +125,7 @@ public class ReservaService {
 		}
 
 		Usuario usuarioSolicitante = usuarioRepository.findById(usuarioSolicitanteId)
-				.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado"));
 
 		boolean esDueno = reserva.getUsuario().getId().equals(usuarioSolicitante.getId());
 		boolean esAdmin = usuarioSolicitante.getRol() == Usuario.Rol.ADMIN;
