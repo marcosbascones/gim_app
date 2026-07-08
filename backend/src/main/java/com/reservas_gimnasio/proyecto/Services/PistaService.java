@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.reservas_gimnasio.proyecto.Dto.Pista.PistaRequestDTO;
 import com.reservas_gimnasio.proyecto.Dto.Pista.PistaResponseDTO;
+import com.reservas_gimnasio.proyecto.Exceptions.RecursoNoEncontradoException;
+import com.reservas_gimnasio.proyecto.Exceptions.ReglaNegocioException;
 import com.reservas_gimnasio.proyecto.Repositories.PistaRepository;
 import com.reservas_gimnasio.proyecto.models.Pista;
 
@@ -29,7 +31,7 @@ public class PistaService {
     public PistaResponseDTO crearPista(PistaRequestDTO request) {
 
         if (pistaRepository.findByNombre(request.getNombre()).isPresent()) {
-            throw new RuntimeException("Nombre ya utilizado");
+            throw new ReglaNegocioException("Nombre ya utilizado");
         }
 
         Pista pista = new Pista();
@@ -48,7 +50,7 @@ public class PistaService {
 
     public PistaResponseDTO obtenerPistaPorId(Long id) {
         Pista pista = pistaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No existe pista con id" + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe pista con id" + id));
 
         logger.info("Pista encontrada: {}", pista);
 
@@ -69,7 +71,7 @@ public class PistaService {
 
     public PistaResponseDTO actualizarPista(Long id, PistaRequestDTO request) {
         Pista pista = pistaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No existe pista con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe pista con id: " + id));
 
         pista.setNombre(request.getNombre());
         pista.setDeporte(request.getDeporte());
@@ -83,7 +85,7 @@ public class PistaService {
 
     public void eliminarPista(Long id) {
         Pista pista = pistaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No existe pista con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe pista con id: " + id));
 
         logger.info("Pista con id: {} eliminada", id);
         pistaRepository.delete(pista);

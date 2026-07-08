@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.reservas_gimnasio.proyecto.Dto.usuario.UsuarioRequestDTO;
 import com.reservas_gimnasio.proyecto.Dto.usuario.UsuarioResponseDTO;
+import com.reservas_gimnasio.proyecto.Exceptions.RecursoNoEncontradoException;
+import com.reservas_gimnasio.proyecto.Exceptions.ReglaNegocioException;
 import com.reservas_gimnasio.proyecto.Repositories.UsuarioRepository;
 import com.reservas_gimnasio.proyecto.models.Usuario;
 
@@ -30,7 +32,7 @@ public class UsuarioService {
     public UsuarioResponseDTO crearUsuario(UsuarioRequestDTO request) {
 
         if (usuarioRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Email ya registrado");
+            throw new ReglaNegocioException("Email ya registrado");
         }
         Usuario usuario = new Usuario();
         usuario.setNombre(request.getNombre());
@@ -49,7 +51,7 @@ public class UsuarioService {
     public UsuarioResponseDTO obtenerUsuarioPorId(Long id) {
 
         Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No existe el usuario con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario con id: " + id));
 
         logger.info("Usuario encontrado: {}", usuario);
         return new UsuarioResponseDTO(usuario.getId(), usuario.getEmail(), usuario.getNombre(), usuario.getEstado(),
@@ -80,7 +82,7 @@ public class UsuarioService {
 
     public UsuarioResponseDTO actualizarUsuario(Long id, UsuarioRequestDTO request) {
         Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No existe el usuario con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario con id: " + id));
 
         usuario.setNombre(request.getNombre());
         usuario.setEmail(request.getEmail());
@@ -97,7 +99,7 @@ public class UsuarioService {
 
     public void eliminarUsuario(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No existe el usuario con id: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("No existe el usuario con id: " + id));
 
         logger.info("Usuario con id: {} eliminado", id);
 
