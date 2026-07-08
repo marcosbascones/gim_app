@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.reservas_gimnasio.proyecto.Dto.Reserva.ReservaRequestDTO;
 import com.reservas_gimnasio.proyecto.Dto.Reserva.ReservaResponseDTO;
+import com.reservas_gimnasio.proyecto.Exceptions.ReglaNegocioException;
 import com.reservas_gimnasio.proyecto.Services.ReservaService;
 
 @RestController
@@ -25,7 +26,11 @@ public class ReservaController {
 
     @PostMapping
     public ResponseEntity<ReservaResponseDTO> crearReserva(@RequestBody ReservaRequestDTO requestDTO) {
-        return ResponseEntity.status(201).body(reservaService.crearReserva(requestDTO));
+        try {
+            return ResponseEntity.status(201).body(reservaService.crearReserva(requestDTO));
+        } catch (ReglaNegocioException e) {
+            return ResponseEntity.badRequest().header("X-Error-Message", e.getMessage()).body(null);
+        }
     }
 
     // usuarioSolicitanteId viaja como query param porque todavía no hay Spring
