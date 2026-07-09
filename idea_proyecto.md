@@ -228,6 +228,7 @@ El sistema inicial incluirá:
 - App móvil
 - Geolocalización de instalaciones
 - Sistema de fidelización de usuarios
+- Asistente conversacional en el frontend: un chat donde el usuario pueda interactuar en lenguaje natural para realizar prácticamente cualquier acción del sistema, incluyendo: darse de alta como usuario nuevo, consultar qué pistas existen y de qué deporte, consultar disponibilidad de horarios, recibir sugerencias de horarios alternativos si no hay disponibilidad, crear una reserva, consultar sus propias reservas y cancelarlas. Única exclusión explícita: el chat nunca debe poder crear o promocionar un usuario con rol ADMIN, por motivos de seguridad. Cualquier acción que escriba datos (alta de usuario, crear reserva, cancelar) debe: (1) confirmarse con el usuario antes de ejecutarse, mostrando claramente qué se va a hacer, y (2) tras ejecutarse, devolver al usuario la confirmación con los datos reales resultantes (ej. "Reserva creada: Pista 2, 12 de febrero 18:00-19:00, estado CONFIRMED"), no un simple "hecho" genérico. Enfoque técnico previsto: function calling con un LLM (ej. API de Claude) que invoque los endpoints ya existentes de los distintos Services como herramientas, en vez de reimplementar la lógica de negocio. Requiere tener el frontend (Angular) construido primero.
 
 ---
 
