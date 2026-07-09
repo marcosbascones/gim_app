@@ -3,6 +3,7 @@ package com.reservas_gimnasio.proyecto;
 import java.time.LocalDateTime;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.reservas_gimnasio.proyecto.Repositories.BloqueoRepository;
@@ -12,8 +13,14 @@ import com.reservas_gimnasio.proyecto.models.Bloqueo;
 import com.reservas_gimnasio.proyecto.models.Pista;
 import com.reservas_gimnasio.proyecto.models.Usuario;
 
-//Para inyectarlo en otras clases 
+//Para inyectarlo en otras clases
 @Component
+
+// Solo se carga si el perfil activo NO es "prod". Con H2 (create-drop) es
+// inofensivo porque la BD se recrea vacía en cada arranque; con MySQL (datos
+// persistentes) reinsertaría los mismos registros en cada reinicio y fallaría
+// por la restricción UNIQUE del email.
+@Profile("!prod")
 
 // CommandLineRunner es una interfaz de Spring Boot que permite ejecutar código
 // justo después de que la aplicación arranca.
