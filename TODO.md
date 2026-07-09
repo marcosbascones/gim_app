@@ -28,3 +28,7 @@
 ## Mejoras transversales pendientes
 
 - Implementar un @ControllerAdvice global en Exceptions/ que capture ReglaNegocioException (y las RuntimeException de "no encontrado") y las traduzca a códigos HTTP apropiados (400/404) en vez del 500 genérico actual. Afecta a BloqueoController, PistaController, UsuarioController y ReservaController por igual — debe implementarse una sola vez para las cuatro entidades, no de forma aislada.
+
+## Prueba de la skill crear-entidad-crud
+
+- Diseñar e implementar una entidad Valoracion (usuario valora una reserva ya completada, con nota y comentario) como prueba práctica de la skill .claude/skills/crear-entidad-crud/SKILL.md. Antes de implementarla, documentar el diseño mínimo en idea_proyecto.md e idea_bbdd.md (no existe todavía ninguna mención a esta entidad). Reglas de negocio mínimas a definir: solo se puede valorar una reserva en estado COMPLETED, y solo una vez por usuario/reserva. Objetivo del ejercicio: comprobar si la skill se activa sola al pedir la creación de una entidad nueva y si aplica el criterio documentado sin tener que repetirlo en el prompt.
