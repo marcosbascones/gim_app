@@ -232,6 +232,12 @@ El sistema inicial incluirá:
 
 ---
 
+## 🏗️ 11. Decisiones de arquitectura/infraestructura futuras
+
+- Dockerizar el proyecto (backend y base de datos MySQL, y frontend cuando exista). Hacerlo después de tener MySQL funcionando de forma nativa en local y bien entendido (usuarios, permisos, conexión JDBC), para poder distinguir problemas de MySQL en sí de problemas de la capa de contenedores. Buen momento estimado: cuando el proyecto tenga backend + frontend + MySQL funcionando en local sin Docker, como paso previo a facilitar el despliegue o el trabajo en varios equipos.
+
+---
+
 ## 🎯 Objetivo del proyecto
 
 Demostrar conocimientos en:
