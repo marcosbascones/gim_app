@@ -23,6 +23,17 @@ Estados: ✅ hecho · 🔄 en marcha · ⬜ pendiente
 - ⬜ **Tailwind v4 / sistema de diseño** — tokens con `@theme`, componentes base reutilizables.
 - ⬜ **Chatbot con function calling** (futuro) — LLM que invoca los endpoints existentes como herramientas.
 
+## Plan de la fase frontend (dashboard)
+
+Orden concreto acordado para esta fase (Carril B), paso a paso:
+
+1. ✅ **Reordenar el contexto** — CLAUDE.md (raíz + frontend), `idea_proyecto.md`, este fichero.
+2. ⬜ **Base del frontend** — `HttpClient`, `environment.ts` con la URL del backend, verificar Tailwind, habilitar CORS en el backend.
+3. ⬜ **Primer flujo vertical** (didáctico) — listar pistas: servicio + componente + ruta + estilo.
+4. ⬜ **Destilar skills** a partir de ese primer flujo (`crear-componente-angular`, `crear-servicio-api`, `estilo-tailwind`).
+5. ⬜ **Resto del dashboard** reutilizando esas skills.
+6. ⬜ **(Futuro) Chatbot** con function calling.
+
 ## Cómo se usa este fichero
 
 - Cada hito del proyecto suele ser también práctica de algún punto de arriba: anotarlo aquí al cerrarlo y actualizar su estado.
