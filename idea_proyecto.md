@@ -151,8 +151,7 @@ Un usuario solo puede:
 
 ---
 
-## 🧪 5. Estrategia de validación
-
+## 🧪 5. Estrategia de validació
 Todas las reglas de negocio deben implementarse en la capa de servicio:
 
 - ❌ No en controllers
@@ -194,7 +193,34 @@ security/
 
 ---
 
-## 🔐 8. Seguridad (fase posterior)
+## 🖥️ 8. Arquitectura del frontend
+
+Frontend en **Angular** (standalone components, signals, control flow nativo) con **Tailwind CSS** para el estilo. Consume la API REST del backend; **ninguna regla de negocio se implementa aquí** — todas viven en la capa de servicio del backend.
+
+El sistema ofrece **dos formas de interacción** sobre la misma API:
+
+### 🖱️ Dashboard clásico
+
+Interfaz de pantallas y formularios. Flujos principales:
+
+- **Usuario:** ver pistas y disponibilidad, crear reserva, consultar sus reservas y cancelarlas.
+- **Administrador:** todo lo anterior + gestión de pistas, usuarios y bloqueos.
+
+### 💬 Asistente conversacional (chatbot)
+
+Un chat donde el usuario interactúa en lenguaje natural para realizar prácticamente cualquier acción: darse de alta, consultar qué pistas existen y de qué deporte, consultar disponibilidad, recibir sugerencias de horarios alternativos si no hay hueco, crear una reserva, consultar sus reservas y cancelarlas.
+
+Reglas del asistente:
+
+- **Nunca** puede crear ni promocionar usuarios con rol ADMIN (por seguridad).
+- Toda acción que **escriba datos** (alta, crear, cancelar) debe: (1) confirmarse con el usuario mostrando claramente qué se va a hacer, y (2) tras ejecutarse, devolver la confirmación con los datos reales resultantes (ej. "Reserva creada: Pista 2, 12 de febrero 18:00–19:00, estado CONFIRMED"), no un simple "hecho".
+- Enfoque técnico previsto: **function calling** con un LLM (p. ej. la API de Claude) que invoca los endpoints de los Services ya existentes como herramientas, en vez de reimplementar la lógica de negocio.
+
+Orden de construcción: primero el **dashboard clásico**; el chatbot es una fase posterior que requiere tener el frontend ya construido.
+
+---
+
+## 🔐 9. Seguridad (fase posterior)
 
 Se implementará en una fase avanzada:
 
@@ -206,10 +232,11 @@ Se implementará en una fase avanzada:
 
 ---
 
-## 🚀 9. MVP (PRIMERA VERSIÓN)
+## 🚀 10. MVP (PRIMERA VERSIÓN)
 
 El sistema inicial incluirá:
 
+### Backend
 - Gestión de usuarios
 - Gestión de pistas
 - Creación de reservas
@@ -217,9 +244,19 @@ El sistema inicial incluirá:
 - Límite de reservas por usuario
 - Cancelación con reglas básicas
 
+### Frontend (dashboard clásico funcional)
+- Consumo de la API REST del backend desde Angular
+- Listado de pistas y su disponibilidad
+- Crear una reserva desde la interfaz
+- Consultar las reservas propias
+- Cancelar una reserva propia
+- Vista de administración de pistas, usuarios y bloqueos
+
+> El **chatbot** NO forma parte del MVP: es una fase posterior (ver secciones 8 y 11).
+
 ---
 
-## 🌱 10. Funcionalidades futuras (NO incluidas en MVP)
+## 🌱 11. Funcionalidades futuras (NO incluidas en MVP)
 
 - Lista de espera para reservas
 - Sistema de pagos
@@ -228,11 +265,11 @@ El sistema inicial incluirá:
 - App móvil
 - Geolocalización de instalaciones
 - Sistema de fidelización de usuarios
-- Asistente conversacional en el frontend: un chat donde el usuario pueda interactuar en lenguaje natural para realizar prácticamente cualquier acción del sistema, incluyendo: darse de alta como usuario nuevo, consultar qué pistas existen y de qué deporte, consultar disponibilidad de horarios, recibir sugerencias de horarios alternativos si no hay disponibilidad, crear una reserva, consultar sus propias reservas y cancelarlas. Única exclusión explícita: el chat nunca debe poder crear o promocionar un usuario con rol ADMIN, por motivos de seguridad. Cualquier acción que escriba datos (alta de usuario, crear reserva, cancelar) debe: (1) confirmarse con el usuario antes de ejecutarse, mostrando claramente qué se va a hacer, y (2) tras ejecutarse, devolver al usuario la confirmación con los datos reales resultantes (ej. "Reserva creada: Pista 2, 12 de febrero 18:00-19:00, estado CONFIRMED"), no un simple "hecho" genérico. Enfoque técnico previsto: function calling con un LLM (ej. API de Claude) que invoque los endpoints ya existentes de los distintos Services como herramientas, en vez de reimplementar la lógica de negocio. Requiere tener el frontend (Angular) construido primero.
+- Asistente conversacional en el frontend (chatbot): descrito en detalle en la sección «8. Arquitectura del frontend». Es una fase posterior porque requiere tener el frontend (Angular) construido primero.
 
 ---
 
-## 🏗️ 11. Decisiones de arquitectura/infraestructura futuras
+## 🏗️ 12. Decisiones de arquitectura/infraestructura futuras
 
 - Dockerizar el proyecto (backend y base de datos MySQL, y frontend cuando exista). Hacerlo después de tener MySQL funcionando de forma nativa en local y bien entendido (usuarios, permisos, conexión JDBC), para poder distinguir problemas de MySQL en sí de problemas de la capa de contenedores. Buen momento estimado: cuando el proyecto tenga backend + frontend + MySQL funcionando en local sin Docker, como paso previo a facilitar el despliegue o el trabajo en varios equipos.
 
@@ -249,6 +286,9 @@ Demostrar conocimientos en:
 - Testing unitario e integración
 - Diseño de sistemas reales
 - Seguridad básica con roles
+- Desarrollo frontend con Angular (dashboard clásico + asistente conversacional)
+- Integración de un LLM mediante function calling sobre la API existente
+- Dirección de asistentes de IA en el desarrollo (gestión de contexto, skills, multiagente, MCP)
 
 ---
 

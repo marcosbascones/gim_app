@@ -29,6 +29,10 @@
 
 - Implementar un @ControllerAdvice global en Exceptions/ que capture ReglaNegocioException (y las RuntimeException de "no encontrado") y las traduzca a códigos HTTP apropiados (400/404) en vez del 500 genérico actual. Afecta a BloqueoController, PistaController, UsuarioController y ReservaController por igual — debe implementarse una sola vez para las cuatro entidades, no de forma aislada.
 
+## Refactor futuro de contexto (CLAUDE.md)
+
+- Extraer un `backend/CLAUDE.md` cuando el `CLAUDE.md` raíz crezca o cuando el detalle de backend (comandos Maven, arquitectura de capas Spring, convenciones snake_case/SLF4J) estorbe en sesiones de frontend. Hoy el raíz hace doble función (global + backend) y es coherente por su tamaño pequeño (~1.8k tokens): separar ahora sería optimización prematura. Modelo objetivo (simétrico): raíz = solo lo global (dominio, reglas de negocio, filosofía de dirigir agentes); `backend/CLAUDE.md` = Spring/Maven/capas/testing; `frontend/CLAUDE.md` = Angular (ya existe). Ventaja del cambio: cada subárbol carga solo su contexto y las sesiones de frontend dejan de arrastrar detalle de backend.
+
 ## Prueba de la skill crear-entidad-crud
 
 - Diseñar e implementar una entidad Valoracion (usuario valora una reserva ya completada, con nota y comentario) como prueba práctica de la skill .claude/skills/crear-entidad-crud/SKILL.md. Antes de implementarla, documentar el diseño mínimo en idea_proyecto.md e idea_bbdd.md (no existe todavía ninguna mención a esta entidad). Reglas de negocio mínimas a definir: solo se puede valorar una reserva en estado COMPLETED, y solo una vez por usuario/reserva. Objetivo del ejercicio: comprobar si la skill se activa sola al pedir la creación de una entidad nueva y si aplica el criterio documentado sin tener que repetirlo en el prompt.
